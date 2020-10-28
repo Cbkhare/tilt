@@ -105,7 +105,7 @@ func TestBuildReasonTriggerAndOtherReason(t *testing.T) {
 
 	state := f.st.LockMutableStateForTesting()
 	state.AppendToTriggerQueue(model.TiltfileManifestName, model.BuildReasonFlagTriggerWeb)
-	state.PendingConfigFileChanges["somefile.txt"] = time.Now()
+	state.PendingConfigFileChanges["somefile.txt"] = time.Now().Add(-1 * time.Second)
 	f.st.UnlockMutableState()
 
 	reloadStarted, _ := f.run(bar)
@@ -196,7 +196,7 @@ func (f *ccFixture) run(m model.Manifest) (start ConfigsReloadStartedAction, end
 
 func (f *ccFixture) setTiltfileHasBuilt() {
 	state := f.st.LockMutableStateForTesting()
-	state.TiltfileState.AddCompletedBuild(model.BuildRecord{StartTime: time.Now()})
+	state.TiltfileState.AddCompletedBuild(model.BuildRecord{StartTime: time.Now().Add(-5 * time.Minute)})
 	f.st.UnlockMutableState()
 }
 
